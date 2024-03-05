@@ -107,7 +107,7 @@ class RegisterWindow(QDialog):
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
 
@@ -176,7 +176,7 @@ class RestaurantListWindow(QDialog):
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
 
@@ -199,14 +199,14 @@ class RestaurantListWindow(QDialog):
             print("Unexpected error:", e)
             return []
 
-class showngo(QDialog):
-    def __init__(self, username):
+class ShownGo(QDialog):
+    def __init__(self, ngo_name):
         super().__init__()
-        self.username = username
+        self.ngo_name = ngo_name
         self.init_ui()
 
     def init_ui(self):
-        self.setWindowTitle("View Profile")
+        self.setWindowTitle(f"View Profile - {self.ngo_name}")
         self.setGeometry(0, 0, 1900, 970)
         background_label = QLabel(self)
         pixmap = QPixmap(r"C:\Users\Hp\Downloads\WhatsApp Image 2024-03-03 at 04.42.13_5b12461d.jpg")
@@ -218,7 +218,7 @@ class showngo(QDialog):
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
             self.cursor = self.db.cursor()
@@ -233,10 +233,10 @@ class showngo(QDialog):
         for i, (x, y) in enumerate(fields_coordinates):
             field = QLineEdit(self)
             if i == 0:  # For the first field
-                field.setGeometry(x, y, 600, 100) 
+                field.setGeometry(x, y, 600, 100)
                 font = QFont("Montserrat", 30)
             else:
-                field.setGeometry(x, y, 500, 50) 
+                field.setGeometry(x, y, 500, 50)
                 font = QFont("Montserrat", 14)
             field.setFont(font)
             field.setReadOnly(True)
@@ -251,7 +251,7 @@ class showngo(QDialog):
 
     def fetch_data(self, info_fields):
         try:
-            query = "SELECT name, city, phone_no, email_id FROM user WHERE username = '" + self.username + "'"
+            query = f"SELECT name, city, phone_no, email_id FROM user WHERE username = '{self.ngo_name}'"
             self.cursor.execute(query)
             data = self.cursor.fetchone()
 
@@ -330,7 +330,7 @@ class showind(QDialog):
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
             self.cursor = self.db.cursor()
@@ -429,7 +429,7 @@ class IndividualWindow(QDialog):
         self.main_window.show()
 
 class NGOListWindow(QDialog):
-    def __init__(self, main_window= None):
+    def __init__(self, main_window=None):
         super().__init__()
         self.main_window = main_window
         self.setWindowTitle("NGO List")
@@ -439,16 +439,28 @@ class NGOListWindow(QDialog):
     def setup_ui(self):
         self.layout = QVBoxLayout()
         self.background_label = QLabel(self)
-        self.background_label.setGeometry(0, 0, 1900, 970)
+        self.background_label.setGeometry(0, 0, 1000, 970)
         self.background_label.setPixmap(QPixmap(r"C:\Users\Hp\Downloads\WhatsApp Image 2024-02-09 at 00.07.12_73cb7d82 (1).jpg").scaled(1900, 970))
 
         rest = self.get_ngo_from_database()
 
         for ngo in rest:
-            restaurant_label = QLabel(ngo[0])  
-            restaurant_label.setFont(QFont("Montserrat", 12))
-            restaurant_label.setStyleSheet("background-color: white; color: #636363")
-            self.layout.addWidget(restaurant_label)
+            ngo_name = ngo[0]
+            ngo_label = QLabel(ngo_name)
+            ngo_label.setFont(QFont("Montserrat", 12, QFont.Bold))
+            ngo_label.setStyleSheet("background-color: #fdffcd; color: #636363; width: 60vw; padding: 15px; border-radius: 10px; margin-bottom: 15px; margin-left: auto; margin-right: auto;")
+
+
+            view_profile_button = QPushButton("View Profile", self)
+            view_profile_button.setFont(QFont("Montserrat", 10))
+            
+
+            view_profile_button.clicked.connect(lambda _, ngo_name=ngo_name: self.view_profile(ngo_name))
+
+            layout_row = QVBoxLayout()
+            layout_row.addWidget(ngo_label)
+            layout_row.addWidget(view_profile_button)
+            self.layout.addLayout(layout_row)
 
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
@@ -463,13 +475,15 @@ class NGOListWindow(QDialog):
 
         self.setLayout(main_layout)
 
+
+
     def get_ngo_from_database(self):
         try:
             db = mysql.connector.connect(
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
 
@@ -491,6 +505,11 @@ class NGOListWindow(QDialog):
             QMessageBox.critical(self, "Error", "An unexpected error occurred: " + str(e))
             print("Unexpected error:", e)
             return []
+        
+    def view_profile(self, ngo_name):
+        profile_dialog = ShownGo(ngo_name)
+        profile_dialog.exec_()
+
 
 class showrest(QDialog):
     def __init__(self, username):
@@ -511,7 +530,7 @@ class showrest(QDialog):
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
             self.cursor = self.db.cursor()
@@ -615,7 +634,7 @@ class MainWindow(QMainWindow):
     def setup_ui(self):
         self.bg_label = QLabel(self)
         self.bg_label.setGeometry(0, 0, 1900,970)
-        self.bg_label.setPixmap(QPixmap(r"C:\Users\Hp\Downloads\HD-wallpaper-blue-wave-blue-abstraction-blue-background.png").scaled(1900,970))
+        self.bg_label.setPixmap(QPixmap(r"F:\PYTHON PROJECTS\Images\homepage2.jpeg").scaled(1900,970))
 
         self.headline_label = QLabel("Food Donation App", self)
         self.headline_label.setGeometry(50, 200, 1900, 110)
@@ -670,7 +689,7 @@ class MainWindow(QMainWindow):
                 host="localhost",
                 port=3306,
                 user="root",
-                password="Chunnilal@5",
+                password="#@ajay#@56#@",
                 database="pythonminiproject"
             )
 
